@@ -1,0 +1,7 @@
+# {{ ansible_managed }}
+# https://caddyserver.com
+# https://caddyserver.com/docs/install#install
+# Caddy Repositories
+
+deb [signed-by={{ repository_caddy_keyring }}] https://dl.cloudsmith.io/public/caddy/stable/deb/debian any-version main
+deb-src [signed-by={{ repository_caddy_keyring }}] https://dl.cloudsmith.io/public/caddy/stable/deb/debian any-version main

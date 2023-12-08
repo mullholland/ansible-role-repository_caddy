@@ -44,10 +44,7 @@ The default values for the variables are set in [`defaults/main.yml`](https://gi
 ---
 repository_caddy_gpg_key: "https://dl.cloudsmith.io/public/caddy/stable/gpg.key"
 repository_caddy_keyring: "/etc/apt/trusted.gpg.d/caddy.gpg"
-
-repository_caddy_apt_repo_urls:
-  - "deb [signed-by={{ repository_caddy_keyring }}] https://dl.cloudsmith.io/public/caddy/stable/deb/debian any-version main"
-  - "deb-src [signed-by={{ repository_caddy_keyring }}] https://dl.cloudsmith.io/public/caddy/stable/deb/debian any-version main"```
+```
 
 ## [Requirements](#requirements)
 
