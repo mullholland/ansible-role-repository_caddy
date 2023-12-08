@@ -1,0 +1,8 @@
+---
+#
+# Ansible managed
+#
+repository:
+  description: Adds the caddy repository (https://caddyserver.com/docs/install) to your system
+  homepage: https://mullholland.net
+  topics: cloud, development, packaging, system, ansible, molecule, tox, playbook

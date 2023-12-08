@@ -1,0 +1,49 @@
+---
+- name: Debian/Ubuntu | Add caddy key
+  ansible.builtin.apt_key:
+    url: "{{ repository_caddy_gpg_key }}"
+    state: present
+    keyring: "{{ repository_caddy_keyring }}"
+  when:
+    - ansible_os_family == "Debian"
+
+- name: Debian/Ubuntu | Add caddy repository
+  ansible.builtin.apt_repository:
+    repo: "{{ repository_caddy_apt_repo_urls }}"
+    state: present
+    filename: caddy
+  register: repository_caddy_status
+  when:
+    - ansible_os_family == "Debian"
+
+- name: Debian/Ubuntu | Update repository cache
+  ansible.builtin.apt:
+    update_cache: true
+  when:
+    - ansible_os_family == "Debian"
+    - repository_caddy_status.changed
+  # Data should be refreshed immediatly for other roles which depend on them
+  # Flush handlers is not used because it would potentially flush handlers,
+  # which are not meant to be flushed at this point in the playbook
+  tags:
+    - skip_ansible_lint
+
+- name: CentOS/RedHat | install yum copr (RHEL/CentOS 7 only)
+  ansible.builtin.get_url:
+    url: "{{ hashicorp_repository_url[ansible_distribution] }}"
+    dest: /etc/yum.repos.d/hashicorp.repo
+    mode: "0644"
+  register: repository_hashicorp_status
+  until: repository_hashicorp_status is succeeded
+  retries: 5
+  delay: 10
+  when:
+    - ansible_distribution in [ "RedHat", "CentOS" ]
+    - ansible_distribution_major_version == 7
+
+- name: CentOS/RedHat | Enable caddy repository via copr
+  community.general.copr:
+    name: "@caddy/caddy"
+    state: enabled
+  when:
+    - ansible_distribution in [ "RedHat", "CentOS", "Amazon", "Rocky", "AlmaLinux", "Fedora" ]

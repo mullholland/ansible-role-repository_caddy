@@ -1,0 +1,35 @@
+---
+galaxy_info:
+  author: Mullholland
+  namespace: mullholland
+  role_name: repository_caddy
+  description: Adds the caddy repository (https://caddyserver.com/docs/install) to your system
+  license: MIT
+  company: none
+  min_ansible_version: "2.10"
+
+  platforms:
+    - name: EL
+      versions:
+        - all
+    - name: Amazon
+      versions:
+        - Candidate
+    - name: Fedora
+      versions:
+        - "38"
+        - "39"
+    - name: Ubuntu
+      versions:
+        - all
+    - name: Debian
+      versions:
+        - all
+
+  galaxy_tags:
+    - cloud
+    - development
+    - packaging
+    - system
+
+dependencies: []
