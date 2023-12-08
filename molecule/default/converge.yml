@@ -3,7 +3,12 @@
   hosts: all
   become: true
   gather_facts: true
-  vars:
-    Key: Value
+
   roles:
     - role: "ansible-role-repository_caddy"
+
+  post_tasks:
+    - name: Install caddy for testing the repository works
+      ansible.builtin.package:
+        name: "caddy"
+        state: present

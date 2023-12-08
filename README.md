@@ -15,10 +15,15 @@ This example is taken from [`molecule/default/converge.yml`](https://github.com/
   hosts: all
   become: true
   gather_facts: true
-  vars:
-    Key: Value
+
   roles:
     - role: "mullholland.repository_caddy"
+
+  post_tasks:
+    - name: Install caddy for testing the repository works
+      ansible.builtin.package:
+        name: "caddy"
+        state: present
 ```
 
 The machine needs to be prepared. In CI this is done using [`molecule/default/prepare.yml`](https://github.com/mullholland/ansible-role-repository_caddy/blob/master/molecule/default/prepare.yml):
@@ -44,10 +49,7 @@ The default values for the variables are set in [`defaults/main.yml`](https://gi
 ---
 repository_caddy_gpg_key: "https://dl.cloudsmith.io/public/caddy/stable/gpg.key"
 repository_caddy_keyring: "/etc/apt/trusted.gpg.d/caddy.gpg"
-
-repository_caddy_apt_repo_urls:
-  - "deb [signed-by={{ repository_caddy_keyring }}] https://dl.cloudsmith.io/public/caddy/stable/deb/debian any-version main"
-  - "deb-src [signed-by={{ repository_caddy_keyring }}] https://dl.cloudsmith.io/public/caddy/stable/deb/debian any-version main"```
+```
 
 ## [Requirements](#requirements)
 
@@ -68,7 +70,6 @@ This role has been tested on these [container images](https://hub.docker.com/u/m
 |container|tags|
 |---------|----|
 |[EL](https://hub.docker.com/r/mullholland/enterpriselinux)|all|
-|[Amazon](https://hub.docker.com/r/mullholland/amazonlinux)|Candidate|
 |[Fedora](https://hub.docker.com/r/mullholland/fedora/)|38, 39|
 |[Ubuntu](https://hub.docker.com/r/mullholland/ubuntu)|all|
 |[Debian](https://hub.docker.com/r/mullholland/debian)|all|

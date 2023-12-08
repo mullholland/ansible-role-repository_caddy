@@ -8,10 +8,12 @@
     - ansible_os_family == "Debian"
 
 - name: Debian/Ubuntu | Add caddy repository
-  ansible.builtin.apt_repository:
-    repo: "{{ repository_caddy_apt_repo_urls }}"
-    state: present
-    filename: caddy
+  ansible.builtin.template:
+    src: "deb.j2"
+    dest: "/etc/apt/sources.list.d/caddy.list"
+    owner: "root"
+    group: "root"
+    mode: "0644"
   register: repository_caddy_status
   when:
     - ansible_os_family == "Debian"
@@ -28,18 +30,26 @@
   tags:
     - skip_ansible_lint
 
+- name: CentOS/RedHat | Include distribution specific variables
+  ansible.builtin.include_vars: "{{ item }}"
+  with_first_found:
+    - 'default.yml'
+
 - name: CentOS/RedHat | install yum copr (RHEL/CentOS 7 only)
-  ansible.builtin.get_url:
-    url: "{{ hashicorp_repository_url[ansible_distribution] }}"
-    dest: /etc/yum.repos.d/hashicorp.repo
-    mode: "0644"
-  register: repository_hashicorp_status
-  until: repository_hashicorp_status is succeeded
-  retries: 5
-  delay: 10
+  ansible.builtin.package:
+    name: "yum-plugin-copr"
+    state: present
   when:
     - ansible_distribution in [ "RedHat", "CentOS" ]
     - ansible_distribution_major_version == 7
+
+- name: CentOS/RedHat | install yum copr (RHEL/CentOS > 7)
+  ansible.builtin.package:
+    name: "dnf-command(copr)"
+    state: present
+  when:
+    - ansible_distribution in [ "RedHat", "CentOS", "Amazon", "Rocky", "AlmaLinux", "Fedora" ]
+    - ansible_distribution_major_version != 7
 
 - name: CentOS/RedHat | Enable caddy repository via copr
   community.general.copr:
