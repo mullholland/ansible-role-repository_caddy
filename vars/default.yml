@@ -1,8 +1,0 @@
----
-repository_caddy_dependencies:
-  RedHat: "https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo"
-  CentOS: "https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo"
-  Rocky: "https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo"
-  AlmaLinux: "https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo"
-  Amazon: "https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo"
-  Fedora: "https://rpm.releases.hashicorp.com/fedora/hashicorp.repo"

@@ -30,11 +30,6 @@
   tags:
     - skip_ansible_lint
 
-- name: CentOS/RedHat | Include distribution specific variables
-  ansible.builtin.include_vars: "{{ item }}"
-  with_first_found:
-    - 'default.yml'
-
 - name: CentOS/RedHat | install yum copr (RHEL/CentOS 7 only)
   ansible.builtin.package:
     name: "yum-plugin-copr"
