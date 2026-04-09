@@ -26,19 +26,6 @@ This example is taken from [`molecule/default/converge.yml`](https://github.com/
         state: present
 ```
 
-The machine needs to be prepared. In CI this is done using [`molecule/default/prepare.yml`](https://github.com/mullholland/ansible-role-repository_caddy/blob/master/molecule/default/prepare.yml):
-
-```yaml
----
-- name: Prepare
-  hosts: all
-  become: true
-  gather_facts: true
-
-  tasks: []
-  roles: []
-```
-
 
 ## [Role Variables](#role-variables)
 
