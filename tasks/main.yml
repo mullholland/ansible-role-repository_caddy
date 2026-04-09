@@ -1,11 +1,20 @@
 ---
-- name: Debian/Ubuntu | Add caddy key
-  ansible.builtin.apt_key:
-    url: "{{ repository_caddy_gpg_key }}"
-    state: present
-    keyring: "{{ repository_caddy_keyring }}"
+- name: Debian/Ubuntu | Ensure keyrings directory exists
+  ansible.builtin.file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: "0755"
   when:
-    - ansible_os_family == "Debian"
+    - ansible_facts["os_family"] == "Debian"
+
+- name: Debian/Ubuntu | Add caddy key
+  ansible.builtin.get_url:
+    url: "{{ repository_caddy_gpg_key }}"
+    dest: "{{ repository_caddy_keyring }}"
+    mode: "0644"
+    force: false
+  when:
+    - ansible_facts["os_family"] == "Debian"
 
 - name: Debian/Ubuntu | Add caddy repository
   ansible.builtin.template:
@@ -16,13 +25,13 @@
     mode: "0644"
   register: repository_caddy_status
   when:
-    - ansible["os_family"] == "Debian"
+    - ansible_facts["os_family"] == "Debian"
 
 - name: Debian/Ubuntu | Update repository cache
   ansible.builtin.apt:
     update_cache: true
   when:
-    - ansible["os_family"] == "Debian"
+    - ansible_facts["os_family"] == "Debian"
     - repository_caddy_status.changed
   # Data should be refreshed immediatly for other roles which depend on them
   # Flush handlers is not used because it would potentially flush handlers,
@@ -35,20 +44,20 @@
     name: "yum-plugin-copr"
     state: present
   when:
-    - ansible["distribution"] in [ "RedHat", "CentOS" ]
-    - ansible["distribution_major_version"] == 7
+    - ansible_facts["distribution"] in [ "RedHat", "CentOS" ]
+    - ansible_facts["distribution_major_version"] == "7"
 
 - name: CentOS/RedHat | install yum copr (RHEL/CentOS > 7)
   ansible.builtin.package:
     name: "dnf-command(copr)"
     state: present
   when:
-    - ansible["distribution"] in [ "RedHat", "CentOS", "Amazon", "Rocky", "AlmaLinux", "Fedora" ]
-    - ansible["distribution_major_version"] != 7
+    - ansible_facts["distribution"] in [ "RedHat", "CentOS", "Amazon", "Rocky", "AlmaLinux", "Fedora" ]
+    - ansible_facts["distribution_major_version"] != "7"
 
 - name: CentOS/RedHat | Enable caddy repository via copr
   community.general.copr:
     name: "@caddy/caddy"
     state: enabled
   when:
-    - ansible["distribution"] in [ "RedHat", "CentOS", "Amazon", "Rocky", "AlmaLinux", "Fedora" ]
+    - ansible_facts["distribution"] in [ "RedHat", "CentOS", "Amazon", "Rocky", "AlmaLinux", "Fedora" ]

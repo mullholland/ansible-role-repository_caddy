@@ -34,7 +34,7 @@ The default values for the variables are set in [`defaults/main.yml`](https://gi
 ```yaml
 ---
 repository_caddy_gpg_key: "https://dl.cloudsmith.io/public/caddy/stable/gpg.key"
-repository_caddy_keyring: "/etc/apt/trusted.gpg.d/caddy.gpg"
+repository_caddy_keyring: "/etc/apt/keyrings/caddy.asc"
 ```
 
 ## [Requirements](#requirements)
@@ -52,8 +52,6 @@ This role has been tested on these [container images](https://hub.docker.com/u/m
 
 |container|tags|
 |---------|----|
-|[EL](https://hub.docker.com/r/mullholland/enterpriselinux)|all|
-|[Fedora](https://hub.docker.com/r/mullholland/fedora/)|all|
 |[Ubuntu](https://hub.docker.com/r/mullholland/ubuntu)|all|
 |[Debian](https://hub.docker.com/r/mullholland/debian)|all|
 
