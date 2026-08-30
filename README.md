@@ -13,17 +13,19 @@ This example is taken from [`molecule/default/converge.yml`](https://github.com/
 ---
 - name: Converge
   hosts: all
-  become: true
   gather_facts: true
-
   roles:
     - role: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}"
 
   post_tasks:
+    # EL8 isn't supported by this role (see tasks/main.yml), so the
+    # repository was never enabled there and caddy isn't installable.
     - name: Install caddy for testing the repository works
       ansible.builtin.package:
         name: "caddy"
         state: present
+      when: >-
+        not (ansible_facts['os_family'] == 'RedHat' and ansible_facts['distribution_major_version'] == '8')
 ```
 
 
@@ -41,6 +43,12 @@ repository_caddy_keyring: "/etc/apt/keyrings/caddy.asc"
 
 - pip packages listed in [requirements.txt](https://github.com/mullholland/ansible-role-repository_caddy/blob/master/requirements.txt).
 
+## [State of used roles](#state-of-used-roles)
+
+The following roles are used to prepare a system. You can prepare your system in another way.
+
+| Requirement | GitHub | GitLab |
+|-------------|--------|--------|
 
 ## [Context](#context)
 
@@ -54,6 +62,10 @@ This role has been tested on these [container images](https://hub.docker.com/u/m
 |---------|----|
 |[Ubuntu](https://hub.docker.com/r/mullholland/ubuntu)|all|
 |[Debian](https://hub.docker.com/r/mullholland/debian)|all|
+|[Fedora](https://hub.docker.com/r/mullholland/fedora/)|all|
+|[Rocky](https://hub.docker.com/r/mullholland/rockylinux)|all|
+|[AlmaLinux](https://hub.docker.com/r/mullholland/almalinux)|all|
+|[CentOS](https://hub.docker.com/r/mullholland/centos)|all|
 
 The minimum version of Ansible required is 2.10, tests have been done to:
 

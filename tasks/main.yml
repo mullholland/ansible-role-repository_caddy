@@ -61,3 +61,8 @@
     state: enabled
   when:
     - ansible_facts["distribution"] in [ "RedHat", "CentOS", "Amazon", "Rocky", "AlmaLinux", "Fedora" ]
+    # EL8's dnf Python bindings only exist for the system's platform-python
+    # (3.6), not the newer interpreter needed for current ansible-core -
+    # this module doesn't support switching interpreters like ansible's own
+    # dnf/yum modules do, so EL8 isn't supported here.
+    - ansible_facts["distribution_major_version"] != "8"
