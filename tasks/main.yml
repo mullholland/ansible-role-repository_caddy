@@ -52,17 +52,18 @@
     name: "dnf-command(copr)"
     state: present
   when:
-    - ansible_facts["distribution"] in [ "RedHat", "CentOS", "Amazon", "Rocky", "AlmaLinux", "Fedora" ]
+    - ansible_facts["distribution"] in [ "RedHat", "CentOS", "Amazon", "Fedora" ]
     - ansible_facts["distribution_major_version"] != "7"
 
+# Rocky and AlmaLinux aren't supported: the @caddy/caddy COPR project only
+# publishes epel-N chroots (its own docs only mention "Fedora, CentOS
+# Stream, or RHEL"), and community.general.copr's chroot auto-detection
+# doesn't map Rocky/AlmaLinux's distro name to the epel-N chroot the way it
+# already does for rhel/centos - it just fails with "Chroot
+# rocky-X.Y-<arch> does not exist".
 - name: CentOS/RedHat | Enable caddy repository via copr
   community.general.copr:
     name: "@caddy/caddy"
     state: enabled
   when:
-    - ansible_facts["distribution"] in [ "RedHat", "CentOS", "Amazon", "Rocky", "AlmaLinux", "Fedora" ]
-    # EL8's dnf Python bindings only exist for the system's platform-python
-    # (3.6), not the newer interpreter needed for current ansible-core -
-    # this module doesn't support switching interpreters like ansible's own
-    # dnf/yum modules do, so EL8 isn't supported here.
-    - ansible_facts["distribution_major_version"] != "8"
+    - ansible_facts["distribution"] in [ "RedHat", "CentOS", "Amazon", "Fedora" ]

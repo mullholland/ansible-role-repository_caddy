@@ -17,8 +17,6 @@
           - "ansible_os_family  => {{ ansible_facts['os_family'] }}"
           - "ansible_system  => {{ ansible_facts['system'] }}"
 
-    # EL8 isn't supported (see tasks/main.yml), so caddy was never
-    # installed there.
     - name: Check if package is installed
       ansible.builtin.package:
         name: "{{ verify.package }}"
@@ -26,4 +24,3 @@
       check_mode: true
       register: package_installed
       failed_when: (package_installed is changed) or (package_installed is failed)
-      when: not (ansible_facts['os_family'] == 'RedHat' and ansible_facts['distribution_major_version'] == '8')

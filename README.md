@@ -18,14 +18,10 @@ This example is taken from [`molecule/default/converge.yml`](https://github.com/
     - role: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}"
 
   post_tasks:
-    # EL8 isn't supported by this role (see tasks/main.yml), so the
-    # repository was never enabled there and caddy isn't installable.
     - name: Install caddy for testing the repository works
       ansible.builtin.package:
         name: "caddy"
         state: present
-      when: >-
-        not (ansible_facts['os_family'] == 'RedHat' and ansible_facts['distribution_major_version'] == '8')
 ```
 
 
@@ -63,8 +59,6 @@ This role has been tested on these [container images](https://hub.docker.com/u/m
 |[Ubuntu](https://hub.docker.com/r/mullholland/ubuntu)|all|
 |[Debian](https://hub.docker.com/r/mullholland/debian)|all|
 |[Fedora](https://hub.docker.com/r/mullholland/fedora/)|all|
-|[Rocky](https://hub.docker.com/r/mullholland/rockylinux)|all|
-|[AlmaLinux](https://hub.docker.com/r/mullholland/almalinux)|all|
 |[CentOS](https://hub.docker.com/r/mullholland/centos)|all|
 
 The minimum version of Ansible required is 2.10, tests have been done to:
