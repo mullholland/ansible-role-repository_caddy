@@ -1,0 +1,7 @@
+---
+roles: []
+
+collections:
+  # https://docs.ansible.com/ansible/latest/collections/community/general/copr_module.html
+  - name: community.general
+    source: https://galaxy.ansible.com

@@ -15,6 +15,9 @@ galaxy_info:
     - name: Debian
       versions:
         - all
+    - name: Fedora
+      versions:
+        - all
 
   galaxy_tags:
     - cloud
